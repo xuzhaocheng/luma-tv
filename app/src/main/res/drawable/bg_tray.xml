@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  底部应用托盘。圆角 = 卡片圆角(12dp) + 内边距(14dp) = 26dp,
+  和里面的卡片同心,不会是那种把卡片四角顶出去的半吊子胶囊。
+
+  两层:底层半透明白 + 上层自上而下的微弱高光,
+  上边缘亮一档,让它看起来是"浮"在背景上,而不是一块平色。
+-->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="#14FFFFFF" />
+            <corners android:radius="26dp" />
+        </shape>
+    </item>
+
+    <item>
+        <shape android:shape="rectangle">
+            <gradient
+                android:angle="270"
+                android:endColor="#00FFFFFF"
+                android:startColor="#26FFFFFF" />
+            <corners android:radius="26dp" />
+        </shape>
+    </item>
+</layer-list>

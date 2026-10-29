@@ -1,0 +1,17 @@
+// 顶层构建文件
+buildscript {
+    repositories {
+        maven { url 'https://dl.google.com/dl/android/maven2/' }
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:7.4.2'
+    }
+}
+
+allprojects {
+    repositories {
+        maven { url 'https://dl.google.com/dl/android/maven2/' }
+        mavenCentral()
+    }
+}

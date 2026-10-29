@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- 纯系统主题:不依赖 androidx,启动更快、更省内存 -->
+    <style name="LauncherTheme" parent="@android:style/Theme.NoTitleBar.Fullscreen">
+        <item name="android:windowBackground">@color/bg_dark</item>
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:alertDialogTheme">@style/DialogTheme</item>
+    </style>
+
+    <!--
+      弹窗用系统深色主题,避免白底白字。
+      注意 android:windowBackground 必须是透明:
+      - 设成纯色会顶掉 Holo 的圆角框体,面板外出现一圈直角深色背景;
+      - 用默认框体则有一大块模糊的阴影晕影,看着像多余的背景。
+      透明后只画面板本身,干净利落。
+    -->
+    <style name="DialogTheme" parent="@android:style/Theme.Holo.Dialog">
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:colorBackground">@color/card_bg</item>
+        <item name="android:textColorPrimary">@color/text_primary</item>
+        <item name="android:textColorSecondary">@color/text_secondary</item>
+    </style>
+</resources>

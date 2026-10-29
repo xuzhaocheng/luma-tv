@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg_dark"
+    android:clipChildren="false">
+
+    <!-- 氛围光:焦点落在某张卡上时整屏微微染上它的主色,动画在代码里做 -->
+    <View
+        android:id="@+id/ambient"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <!--
+      整页是一条可滚动的竖线(顶栏 → 信源 → 托盘 → 应用网格)。
+      按「下」时焦点进入网格,内容整体上滚,视觉上就是同一页继续往下,
+      而不是弹出第二个界面。
+    -->
+    <com.luma.home.TvScrollView
+        android:id="@+id/scroll"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipChildren="true"
+        android:clipToPadding="true"
+        android:fillViewport="true"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:id="@+id/content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clipChildren="false"
+            android:clipToPadding="false"
+            android:orientation="vertical"
+            android:paddingLeft="48dp"
+            android:paddingTop="48dp"
+            android:paddingRight="48dp"
+            android:paddingBottom="110dp">
+
+            <!-- 顶栏:时间 + 信源/媒体库/设置入口 -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clipChildren="false"
+                android:clipToPadding="false"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tv_clock"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/text_primary"
+                    android:textSize="52sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tv_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="18dp"
+                    android:textColor="@color/text_secondary"
+                    android:textSize="20sp" />
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_weight="1" />
+
+                <!-- 内存/存储(设置里可关) -->
+                <TextView
+                    android:id="@+id/tv_stats"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="24dp"
+                    android:gravity="end"
+                    android:textColor="@color/text_secondary"
+                    android:textSize="16sp" />
+
+                <!-- 右上角三个入口包在一个半透明胶囊里(参考 tvOS) -->
+                <LinearLayout
+                    android:id="@+id/nav_group"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_pill"
+                    android:clipChildren="false"
+                    android:clipToPadding="false"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingLeft="6dp"
+                    android:paddingTop="6dp"
+                    android:paddingRight="6dp"
+                    android:paddingBottom="6dp">
+
+                    <ImageButton
+                        android:id="@+id/btn_source"
+                        android:layout_width="56dp"
+                        android:layout_height="56dp"
+                        android:background="@drawable/bg_nav_segment"
+                        android:contentDescription="@string/source"
+                        android:focusable="true"
+                        android:focusableInTouchMode="true"
+                        android:padding="12dp"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/ic_source" />
+
+                    <ImageButton
+                        android:id="@+id/btn_media"
+                        android:layout_width="56dp"
+                        android:layout_height="56dp"
+                        android:layout_marginStart="4dp"
+                        android:background="@drawable/bg_nav_segment"
+                        android:contentDescription="@string/media_library"
+                        android:focusable="true"
+                        android:focusableInTouchMode="true"
+                        android:padding="12dp"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/ic_media" />
+
+                    <ImageButton
+                        android:id="@+id/btn_settings"
+                        android:layout_width="56dp"
+                        android:layout_height="56dp"
+                        android:layout_marginStart="4dp"
+                        android:background="@drawable/bg_nav_segment"
+                        android:contentDescription="@string/settings"
+                        android:focusable="true"
+                        android:focusableInTouchMode="true"
+                        android:padding="12dp"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/ic_settings" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- 常用信源 -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="94dp"
+                android:layout_marginBottom="26dp"
+                android:clipChildren="false"
+                android:clipToPadding="false"
+                android:gravity="center_vertical"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tv_sources_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:text="@string/home_sources_label"
+                    android:textColor="@color/text_primary"
+                    android:textSize="28sp"
+                    android:textStyle="bold" />
+
+                <LinearLayout
+                    android:id="@+id/row_sources"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:clipChildren="false"
+                    android:clipToPadding="false"
+                    android:orientation="horizontal" />
+            </LinearLayout>
+
+            <!-- 应用区标题(焦点应用名) -->
+            <TextView
+                android:id="@+id/tv_focus_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:gravity="start"
+                android:singleLine="true"
+                android:text="@string/home_apps_label"
+                android:textColor="@color/text_primary"
+                android:textSize="28sp"
+                android:textStyle="bold" />
+
+            <!-- 应用托盘:固定 4 格宽 -->
+            <LinearLayout
+                android:id="@+id/tray_apps"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_tray"
+                android:clipChildren="false"
+                android:clipToPadding="false"
+                android:orientation="horizontal"
+                android:padding="14dp">
+
+                <LinearLayout
+                    android:id="@+id/row_apps"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:clipChildren="false"
+                    android:clipToPadding="false"
+                    android:orientation="horizontal" />
+            </LinearLayout>
+
+            <!-- 全部应用:接着托盘往下排,样式与托盘一致 -->
+            <LinearLayout
+                android:id="@+id/grid_apps"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="42dp"
+                android:clipChildren="false"
+                android:clipToPadding="false"
+                android:orientation="vertical" />
+
+        </LinearLayout>
+    </com.luma.home.TvScrollView>
+</FrameLayout>

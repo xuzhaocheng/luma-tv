@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  胶囊里被选中的那一段。用的是"填色"不是"描边",所以不会出现以前那种框。
+  底色和 bg_pill 用同一个 alpha,因为两层会叠加,选中段自然比胶囊亮一档。
+-->
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_focused="true">
+        <shape android:shape="rectangle">
+            <solid android:color="#33FFFFFF" />
+            <corners android:radius="28dp" />
+        </shape>
+    </item>
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="@android:color/transparent" />
+            <corners android:radius="28dp" />
+        </shape>
+    </item>
+</selector>

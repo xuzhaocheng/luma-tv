@@ -1,0 +1,38 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 33
+
+    defaultConfig {
+        applicationId "com.luma.home"
+        minSdkVersion 19
+        targetSdkVersion 28
+        versionCode 1
+        versionName "1.0"
+        // API 19 没有原生 VectorDrawable,构建时栅格化。
+        // 只生成 xxxhdpi(240px/24dp),让 240dpi 电视从高分辨率往下缩,避免放大发虚。
+        vectorDrawables.generatedDensities = ['xxxhdpi']
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    lint {
+        // 这是侧载到老电视的应用,不进应用商店,targetSdk 保持在 28 更稳
+        disable 'ExpiredTargetSdkVersion'
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled true
+            shrinkResources true
+            // 个人侧载,直接用 debug 签名,省一套 keystore
+            signingConfig signingConfigs.debug
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+// 不依赖 androidx:只用系统控件,省掉约 2MB 和一批启动开销

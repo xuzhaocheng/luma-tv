@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Luma TV Home</string>
+
+    <string name="settings">Settings</string>
+    <string name="media_library">Media library</string>
+    <string name="media_unavailable">Media library unavailable</string>
+    <string name="source">Inputs</string>
+    <string name="all_apps">All</string>
+    <string name="add_source">Add input</string>
+    <string name="add_app">Add app</string>
+
+    <string name="source_panel_title">All inputs</string>
+    <string name="source_edit_title">Edit input</string>
+
+    <string name="hint_source">OK to switch · long-press OK to edit</string>
+    <string name="hint_all_apps">Press Up to close · long-press OK to pin</string>
+    <string name="home_sources_label">Favorite inputs</string>
+    <string name="home_apps_label">Apps</string>
+    <string name="hint_down_all_apps">Press Down for all apps</string>
+
+    <string name="pinned_full_title">Favorites full</string>
+    <string name="pinned_full_msg">The home screen holds up to 4 favorite inputs. Replace “%1$s”?</string>
+
+    <string name="app_pin">Pin to home</string>
+    <string name="app_unpin">Unpin</string>
+    <string name="app_pinned_toast">Pinned to home</string>
+    <string name="app_unpinned_toast">Unpinned</string>
+    <string name="app_pin_full">Home is full — the oldest “%1$s” will be replaced</string>
+
+    <string name="save">Save</string>
+    <string name="cancel">Cancel</string>
+    <string name="ok">OK</string>
+    <string name="close">Close</string>
+
+    <string name="edit_name">Name</string>
+    <string name="edit_icon">Icon</string>
+    <string name="edit_pin">Show on home screen</string>
+    <string name="edit_custom_hint">Custom name</string>
+
+    <string name="settings_system">System</string>
+    <string name="settings_factory">Factory menu</string>
+    <string name="settings_factory_desc">The Sharp factory menu: startup input, panel and other system-level settings. This is also where you turn ADB on.</string>
+    <string name="factory_unavailable">Factory menu unavailable</string>
+    <string name="settings_home">Home screen</string>
+    <string name="pinned_count_fmt">%1$d / %2$d</string>
+    <string name="settings_default_home">Default home</string>
+    <string name="settings_default_home_desc">To switch, clear the current default, then press HOME.</string>
+    <string name="default_home_title">Default home</string>
+    <string name="default_home_unknown">Not set</string>
+    <string name="default_home_msg">Current: %1$s\n\nAndroid 4.4 does not let an app switch the default home directly. Clear the default first, then press HOME and choose the launcher you want.</string>
+    <string name="default_home_clear_luma">Clear Luma</string>
+    <string name="default_home_failed">Could not clear the default. Try again.</string>
+    <string name="default_home_cleared">Default cleared. Press HOME and choose a launcher.</string>
+    <string name="settings_home_sources">Favorite inputs</string>
+    <string name="settings_media_app">Media app</string>
+    <string name="settings_media_app_desc">Which app the media button on the home top bar opens.</string>
+    <string name="media_app_default">Default (Sharp player)</string>
+    <string name="settings_show_internal_apps">Show internal services</string>
+    <string name="settings_show_internal_desc">BTBinder, HotelMenu, OtaUpgrade and similar services are hidden. Turn on to show them in All apps.</string>
+    <string name="settings_about">About</string>
+    <string name="settings_version">Luma TV Home v1.0</string>
+
+    <!-- 信号源默认名 -->
+    <string name="src_atv">Analog TV</string>
+    <string name="src_dvbc">Cable</string>
+    <string name="src_dtmb">Antenna</string>
+    <string name="src_av1">AV1</string>
+    <string name="src_av2">AV2</string>
+    <string name="src_av3">AV3</string>
+    <string name="src_vga">VGA</string>
+    <string name="src_ypbpr1">Component 1</string>
+    <string name="src_ypbpr2">Component 2</string>
+    <string name="src_hdmi1">HDMI1</string>
+    <string name="src_hdmi2">HDMI2</string>
+    <string name="src_hdmi3">HDMI3</string>
+    <string name="src_hdmi4">HDMI4</string>
+    <string name="src_media">Media</string>
+    <string name="src_scart1">SCART1</string>
+    <string name="src_scart2">SCART2</string>
+    <string name="src_auto">Auto</string>
+    <string name="src_generic">Input %1$d</string>
+
+    <!-- 图标名 -->
+    <string name="icon_appletv">Apple TV</string>
+    <string name="icon_ps">PlayStation</string>
+    <string name="icon_switch">Switch</string>
+    <string name="icon_xbox">Xbox</string>
+    <string name="icon_pc">PC</string>
+    <string name="icon_bluray">Blu-ray</string>
+    <string name="icon_box">Set-top box</string>
+    <string name="icon_projector">Projector</string>
+    <string name="icon_speaker">Speaker</string>
+    <string name="icon_hdmi">Input</string>
+    <string name="icon_media">Media</string>
+    <string name="icon_tv">TV</string>
+    <string name="icon_soundbar">Soundbar</string>
+    <string name="icon_receiver">Receiver</string>
+    <string name="icon_nas">NAS</string>
+    <string name="icon_camera">Camera</string>
+
+    <!-- 名字预设 -->
+    <string name="preset_tv">TV</string>
+    <string name="preset_settop">Set-top box</string>
+    <string name="preset_ps5">PS5</string>
+    <string name="preset_switch">Switch</string>
+    <string name="preset_xbox">Xbox</string>
+    <string name="preset_pc">PC</string>
+    <string name="preset_bluray">Blu-ray</string>
+    <string name="preset_projector">Projector</string>
+    <string name="preset_speaker">Speaker</string>
+    <string name="preset_camera">Camera</string>
+    <string name="settings_appearance">Appearance</string>
+    <string name="settings_focus_title">Focused app name</string>
+    <string name="settings_stats">Memory / storage</string>
+    <string name="on">On</string>
+    <string name="off">Off</string>
+    <string name="stats_fmt">%1$d MB free RAM · %2$s free storage</string>
+    <string name="menu_app_info">App info</string>
+    <string name="menu_uninstall">Uninstall</string>
+    <string name="settings_background">Background</string>
+    <string name="bg_default">Midnight</string>
+    <string name="bg_blue">Ink blue</string>
+    <string name="bg_graphite">Graphite</string>
+    <string name="bg_brown">Dark brown</string>
+    <string name="bg_green">Ink green</string>
+    <string name="bg_purple">Dark violet</string>
+
+    <!-- 遥控器快捷键 -->
+    <string name="settings_remote">Remote</string>
+    <string name="settings_remote_key">Remote shortcut</string>
+    <string name="settings_remote_desc">Press a spare remote key to switch to an input. Requires the accessibility service.</string>
+    <string name="remote_title">Remote shortcut</string>
+    <string name="remote_service">Accessibility service</string>
+    <string name="remote_service_on">On</string>
+    <string name="remote_service_off">Off</string>
+    <string name="remote_service_desc">Captures one remote key. Everything stays on the TV.</string>
+    <string name="remote_target">Target input</string>
+    <string name="remote_target_title">Target input</string>
+    <string name="remote_learn">Learn key</string>
+    <string name="remote_learn_none">Not set</string>
+    <string name="remote_learning">Press the remote key you want to use…  (Back to cancel)</string>
+    <string name="remote_learn_hint">Use a spare key (color/info/guide/number). If nothing happens when you press it, the system owns that key — pick another. In short-press mode the key is dedicated and its original function stops.</string>
+    <string name="remote_mode">Trigger</string>
+    <string name="remote_mode_short">Short press</string>
+    <string name="remote_mode_long">Long-press</string>
+    <string name="remote_mode_short_desc">The key is fully taken over. Original function stops.</string>
+    <string name="remote_mode_long_desc">Short press is passed through; hold 700ms to switch. Some system keys may still react first.</string>
+    <string name="remote_enabled">Enabled</string>
+    <string name="remote_test">Test switch</string>
+    <string name="remote_clear">Clear</string>
+    <string name="remote_summary">%1$s → %2$s</string>
+    <string name="remote_key_long_fmt">%1$s (long-press)</string>
+    <string name="remote_saved_fmt">Saved: %1$s → %2$s</string>
+    <string name="remote_switched_fmt">Switched to %1$s</string>
+    <string name="remote_switch_sent">Switch command sent</string>
+    <string name="remote_need_target">Pick a target input first</string>
+    <string name="remote_need_key">Learn a key first</string>
+    <string name="remote_need_service">Enable the accessibility service first</string>
+    <string name="remote_service_title">Accessibility service</string>
+    <string name="remote_service_msg">The shortcut needs the accessibility service to capture the remote key. No data leaves the TV.</string>
+    <string name="remote_go_enable">Open settings</string>
+    <string name="remote_later">Later</string>
+    <string name="remote_key_menu">Menu</string>
+    <string name="remote_key_info">Info</string>
+    <string name="remote_key_guide">Guide</string>
+    <string name="remote_key_input">Input</string>
+    <string name="remote_key_settings">Settings</string>
+    <string name="remote_key_red">Red</string>
+    <string name="remote_key_green">Green</string>
+    <string name="remote_key_yellow">Yellow</string>
+    <string name="remote_key_blue">Blue</string>
+    <string name="remote_key_unknown_fmt">Key %1$d</string>
+    <string name="remote_key_code_fmt">Key code: %1$d</string>
+    <string name="remote_key_rejected">That key cannot be used. Pick another one.</string>
+    <string name="remote_key_risky">This key may be used by the system. If it misbehaves, pick another key.</string>
+    <string name="remote_confirm_title">Key captured</string>
+    <string name="remote_confirm_msg">%1$s\n\nUse it to switch to “%2$s”?</string>
+    <string name="remote_confirm_retry">Retry</string>
+    <string name="remote_confirm_save">Save</string>
+    <string name="remote_clear_title">Clear shortcut</string>
+    <string name="remote_clear_msg">Remove the remote shortcut?</string>
+    <string name="remote_service_label">Luma TV Remote Key</string>
+    <string name="remote_test_hint">After saving, go back to the home screen and press the key once to test. If nothing happens, pick another key.</string>
+</resources>

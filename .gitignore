@@ -6,3 +6,6 @@ local.properties
 captures/
 .externalNativeBuild/
 *.apk
+
+# internal handoff notes, not published
+HANDOFF.md

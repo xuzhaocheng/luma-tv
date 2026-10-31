@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
@@ -169,31 +170,85 @@ public class SettingsActivity extends Activity {
         tvBgValue.setText(Backgrounds.name(this, Prefs.background(this)));
     }
 
-    private String currentHomeLabel() {
+    /** 当前默认桌面的包名;系统"未设置"(按 HOME 会弹选择框)时返回 null */
+    private String currentHomePackage() {
         try {
             Intent home = new Intent(Intent.ACTION_MAIN).addCategory(Intent.CATEGORY_HOME);
             ResolveInfo ri = getPackageManager().resolveActivity(home, PackageManager.MATCH_DEFAULT_ONLY);
             if (ri != null && ri.activityInfo != null) {
                 String pkg = ri.activityInfo.packageName;
-                if (pkg != null && !"android".equals(pkg) && !pkg.contains("Resolver")) {
-                    CharSequence label = ri.loadLabel(getPackageManager());
-                    return label == null || label.length() == 0 ? pkg : label.toString();
+                // 没设置默认时 resolve 出来的是系统选择器,包名是 android
+                if (pkg != null && !"android".equals(pkg)) {
+                    return pkg;
                 }
             }
         } catch (Throwable ignored) {
         }
+        return null;
+    }
+
+    private String currentHomeLabel() {
+        String pkg = currentHomePackage();
+        if (pkg != null) {
+            try {
+                CharSequence label = getPackageManager()
+                        .getApplicationLabel(getPackageManager().getApplicationInfo(pkg, 0));
+                if (label != null && label.length() > 0) {
+                    return label.toString();
+                }
+            } catch (Throwable ignored) {
+            }
+            return pkg;
+        }
         return getString(R.string.default_home_unknown);
     }
 
+    private boolean isDefaultHome() {
+        return getPackageName().equals(currentHomePackage());
+    }
+
+    /**
+     * 两种状态要分开处理:
+     * - 拾光就是默认 → 清掉自己的默认(不需要权限,直接生效)
+     * - 别的桌面是默认 → Android 不允许应用清别人的默认设置,只能打开它的应用信息页,
+     *   让用户点「清除默认设置」,然后按 HOME 选择
+     */
     private void showDefaultHomeDialog() {
+        if (isDefaultHome()) {
+            new AlertDialog.Builder(this)
+                    .setTitle(R.string.default_home_title)
+                    .setMessage(getString(R.string.default_home_msg_self, currentHomeLabel()))
+                    .setPositiveButton(R.string.default_home_clear_luma,
+                            new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface d, int which) {
+                                    clearOwnDefault();
+                                }
+                            })
+                    .setNegativeButton(R.string.cancel, null)
+                    .show();
+            return;
+        }
+
+        final String pkg = currentHomePackage();
+        if (pkg == null) {
+            // 系统没有设置默认:按 HOME 会直接弹选择框,不需要清除任何东西
+            new AlertDialog.Builder(this)
+                    .setTitle(R.string.default_home_title)
+                    .setMessage(R.string.default_home_msg_unset)
+                    .setPositiveButton(R.string.ok, null)
+                    .show();
+            return;
+        }
+
         new AlertDialog.Builder(this)
                 .setTitle(R.string.default_home_title)
-                .setMessage(getString(R.string.default_home_msg, currentHomeLabel()))
-                .setPositiveButton(R.string.default_home_clear_luma,
+                .setMessage(getString(R.string.default_home_msg_other, currentHomeLabel()))
+                .setPositiveButton(R.string.default_home_open_info,
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface d, int which) {
-                                clearOwnDefault();
+                                openAppInfo(pkg);
                             }
                         })
                 .setNegativeButton(R.string.cancel, null)
@@ -202,9 +257,7 @@ public class SettingsActivity extends Activity {
 
     /**
      * 直接清掉自己的默认桌面设置,不用跳系统设置页。
-     * 正常模式下 com.android.settings 是被夏普替换掉的(关工厂模式后不存在),
-     * 而通用 action 会被应用管家劫持,所以能自己干就自己干。
-     * Android 4.4 允许应用清除「自己」的 preferred activities。
+     * Android 4.4 允许应用清除「自己」的 preferred activities,不需要任何权限。
      */
     private void clearOwnDefault() {
         try {
@@ -213,6 +266,29 @@ public class SettingsActivity extends Activity {
             refreshValues();
         } catch (Throwable t) {
             Toast.makeText(this, R.string.default_home_failed, Toast.LENGTH_LONG).show();
+        }
+    }
+
+    /** 打开某个应用的应用信息页(里面才有「清除默认设置」按钮) */
+    private void openAppInfo(String pkg) {
+        if (pkg == null) {
+            Toast.makeText(this, R.string.default_home_failed, Toast.LENGTH_LONG).show();
+            return;
+        }
+        try {
+            Intent i = new Intent(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+                    Uri.parse("package:" + pkg));
+            startActivity(i);
+        } catch (Throwable t) {
+            try {
+                Intent i = new Intent();
+                i.setComponent(new ComponentName("com.android.settings",
+                        "com.android.settings.applications.InstalledAppDetails"));
+                i.setData(Uri.parse("package:" + pkg));
+                startActivity(i);
+            } catch (Throwable t2) {
+                Toast.makeText(this, R.string.default_home_failed, Toast.LENGTH_LONG).show();
+            }
         }
     }
 

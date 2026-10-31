@@ -48,7 +48,10 @@
     <string name="settings_default_home_desc">To switch, clear the current default, then press HOME.</string>
     <string name="default_home_title">Default home</string>
     <string name="default_home_unknown">Not set</string>
-    <string name="default_home_msg">Current: %1$s\n\nAndroid 4.4 does not let an app switch the default home directly. Clear the default first, then press HOME and choose the launcher you want.</string>
+    <string name="default_home_msg_self">Current: %1$s\n\nClear Luma as the default, then press HOME and choose the launcher you want.</string>
+    <string name="default_home_msg_other">Current: %1$s\n\nAndroid 4.4 does not let an app clear the default of another launcher. Open its App info, tap “Clear defaults”, then press HOME and choose Luma TV Home.</string>
+    <string name="default_home_msg_unset">No default launcher is set. Press HOME and a chooser will appear; pick Luma TV Home and choose “Always”.</string>
+    <string name="default_home_open_info">Open App info</string>
     <string name="default_home_clear_luma">Clear Luma</string>
     <string name="default_home_failed">Could not clear the default. Try again.</string>
     <string name="default_home_cleared">Default cleared. Press HOME and choose a launcher.</string>

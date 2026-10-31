@@ -48,7 +48,10 @@
     <string name="settings_default_home_desc">切换桌面：先清除当前默认，再按 HOME 选择。</string>
     <string name="default_home_title">默认桌面</string>
     <string name="default_home_unknown">未设置</string>
-    <string name="default_home_msg">当前：%1$s\n\nAndroid 4.4 不允许应用直接切换默认桌面。先清除默认,再按 HOME 选择要用的桌面即可。</string>
+    <string name="default_home_msg_self">当前：%1$s\n\n清除拾光的默认设置后，按 HOME 重新选择要用的桌面。</string>
+    <string name="default_home_msg_other">当前：%1$s\n\nAndroid 4.4 不允许应用清除别的桌面的默认设置。请打开它的「应用信息」，点「清除默认设置」，再按 HOME 选择拾光桌面。</string>
+    <string name="default_home_msg_unset">系统还没有设置默认桌面。按 HOME 键会弹出选择框,选「拾光桌面」再选「始终」即可。</string>
+    <string name="default_home_open_info">去清除默认</string>
     <string name="default_home_clear_luma">清拾光默认</string>
     <string name="default_home_failed">清除默认失败,请再试一次</string>
     <string name="default_home_cleared">已清除默认桌面,现在按 HOME 选择桌面</string>

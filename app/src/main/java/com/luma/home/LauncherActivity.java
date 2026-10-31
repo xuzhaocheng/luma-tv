@@ -71,6 +71,13 @@ public class LauncherActivity extends Activity {
     private ValueAnimator ambientAnim;
     private int ambientColor;
     private String lastSignature;
+    /**
+     * 初始焦点是否已定过,以及最近聚焦的卡片身份。
+     * 必须是静态的:从应用回到桌面时,系统会把 Activity 销毁重建,
+     * 实例字段会全部丢失,焦点就又被拽回信源行了。
+     */
+    private static boolean sInitialFocusDone;
+    private static String sLastFocusKey;
     private boolean gridFocused;
     private final Map<String, android.graphics.Bitmap> artCache = new HashMap<>();
     private final Map<String, Integer> glowCache = new HashMap<>();
@@ -270,11 +277,94 @@ public class LauncherActivity extends Activity {
         // 内容没变就不重建视图,避免每次回桌面都重新膨胀一遍布局
         String sig = signature();
         if (!sig.equals(lastSignature)) {
+            // 重建会把卡片全部换掉,焦点会丢;先记住原来在哪,重建后放回去
+            String keepKey = sLastFocusKey != null ? sLastFocusKey : currentFocusKey();
             lastSignature = sig;
             buildSourceRow();
             buildAppRow();
             buildGrid();
+            restoreFocus(keepKey);
         }
+        // 初始焦点只定一次:返回桌面时签名可能因为"最后使用时间"变了而重建行,
+        // 那时不该把焦点从用户停留的位置拽回信源行。
+        if (!sInitialFocusDone) {
+            sInitialFocusDone = true;
+            focusInitial();
+        }
+        // 万一从别的应用回来时焦点整个丢了(重建把原来那张卡换掉了),兜一次底
+        final View rootView = findViewById(R.id.root);
+        if (rootView != null) {
+            rootView.post(new Runnable() {
+                @Override
+                public void run() {
+                    if (getCurrentFocus() != null) {
+                        return;
+                    }
+                    // 从应用回来时系统不一定把焦点还给我们,先回到原来那张卡
+                    if (!restoreFocus(sLastFocusKey)) {
+                        focusInitial();
+                    }
+                }
+            });
+        }
+    }
+
+    /** 按身份标记把焦点放回对应卡片;找不到就返回 false */
+    private boolean restoreFocus(String key) {
+        if (key == null) {
+            return false;
+        }
+        View v = findByFocusKey(rowSources, key);
+        if (v == null) {
+            v = findByFocusKey(rowApps, key);
+        }
+        if (v == null) {
+            v = findByFocusKey(gridApps, key);
+        }
+        if (v == null) {
+            return false;
+        }
+        v.requestFocus();
+        return true;
+    }
+
+    private void rememberFocusKey(View card, boolean hasFocus) {
+        if (hasFocus) {
+            Object t = card.getTag();
+            if (t instanceof String) {
+                sLastFocusKey = (String) t;
+            }
+        }
+    }
+
+    /** 当前焦点卡片的身份标记("focus:src:3" / "focus:app:com.xxx");不在卡片上时为 null */
+    private String currentFocusKey() {
+        View f = getCurrentFocus();
+        if (f == null) {
+            return null;
+        }
+        Object t = f.getTag();
+        return (t instanceof String && ((String) t).startsWith("focus:")) ? (String) t : null;
+    }
+
+    private View findByFocusKey(ViewGroup root, String key) {
+        if (root == null) {
+            return null;
+        }
+        for (int i = 0; i < root.getChildCount(); i++) {
+            View c = root.getChildAt(i);
+            Object t = c.getTag();
+            if (t instanceof String && key.equals(t)) {
+                return c;
+            }
+            if (c instanceof ViewGroup) {
+                View r = findByFocusKey((ViewGroup) c, key);
+                if (r != null) {
+                    return r;
+                }
+            }
+        }
+        return null;
     }
 
     private String signature() {
@@ -472,6 +562,23 @@ public class LauncherActivity extends Activity {
     }
 
     /**
+     * 进入桌面时的初始焦点:优先第一个常用信源。
+     * 信源是首页最上面的区块,"先选看什么"的顺序从它开始最自然;
+     * 没有固定信源时退到第一个固定应用,再没有就落到顶栏。
+     */
+    private void focusInitial() {
+        if (!SourceStore.pinned(this).isEmpty() && rowSources.getChildCount() > 0) {
+            rowSources.getChildAt(0).requestFocus();
+            return;
+        }
+        if (rowApps.getChildCount() > 0) {
+            rowApps.getChildAt(0).requestFocus();
+            return;
+        }
+        findViewById(R.id.btn_source).requestFocus();
+    }
+
+    /**
      * 把一行的左右焦点连成闭环:第一个再按左、最后一个再按右都停在原地。
      * 否则系统会按几何位置继续搜索,跑到别的区块去(比如信源末尾按右跳到网格)。
      */
@@ -590,8 +697,11 @@ public class LauncherActivity extends Activity {
                 v.animate().scaleX(s).scaleY(s)
                         .alpha(hasFocus ? 1f : CARD_DIM).setDuration(FOCUS_ANIM_MS).start();
                 setAmbient(0);   // 信源行不参与氛围光
+                rememberFocusKey(v, hasFocus);
             }
         });
+        // 记下身份:重建行之后靠它把焦点放回原处
+        card.setTag("focus:src:" + item.id);
         return card;
     }
 
@@ -663,10 +773,6 @@ public class LauncherActivity extends Activity {
             rowApps.getChildAt(last).setLayoutParams(lp);
         }
         chainHorizontal(rowApps);
-        // 默认把焦点放在第一项上,顺便让顶部大字有内容
-        if (rowApps.getChildCount() > 0) {
-            rowApps.getChildAt(0).requestFocus();
-        }
         // 焦点落位会把页面滚一下,首屏构图就不可控了;
         // 布局结束后回到顶部,保证"露出一条边"是设计出来的,不是碰运气
         final View sc = findViewById(R.id.scroll);
@@ -1017,8 +1123,10 @@ public class LauncherActivity extends Activity {
                 } else {
                     hideRowName(v);
                 }
+                rememberFocusKey(v, hasFocus);
             }
         });
+        slot.setTag("focus:app:" + e.pkg);
         return slot;
     }
 

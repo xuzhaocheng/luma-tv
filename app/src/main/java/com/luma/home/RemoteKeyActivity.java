@@ -3,6 +3,7 @@ package com.luma.home;
 import android.accessibilityservice.AccessibilityServiceInfo;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -350,16 +351,32 @@ public class RemoteKeyActivity extends Activity {
                 .show();
     }
 
+    /**
+     * 打开无障碍设置页。
+     *
+     * 这台电视有两套设置:com.android.settings(AOSP)和 com.sharp.settings(夏普)。
+     * 进过工厂模式后 com.sharp.settings 会被禁用,这时按遥控器的"设置"键什么都不会发生,
+     * 但 AOSP 那套仍在,所以这里逐个试,不依赖某一条固定路径。
+     */
     private void openAccessibilitySettings() {
-        try {
-            startActivity(new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS));
-        } catch (Throwable t) {
+        Intent[] candidates = new Intent[]{
+                new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS),
+                new Intent().setComponent(new ComponentName(
+                        "com.android.settings", "com.android.settings.AccessibilitySettings")),
+                new Intent().setComponent(new ComponentName(
+                        "com.android.settings", "com.android.settings.Settings")),
+                new Intent(Settings.ACTION_SETTINGS)
+        };
+        for (Intent i : candidates) {
+            i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             try {
-                startActivity(new Intent(Settings.ACTION_SETTINGS));
+                startActivity(i);
+                return;
             } catch (Throwable ignored) {
+                // 试下一个
             }
-            Toast.makeText(this, R.string.remote_need_service, Toast.LENGTH_LONG).show();
         }
+        Toast.makeText(this, R.string.remote_need_service, Toast.LENGTH_LONG).show();
     }
 
     private boolean isServiceEnabled() {

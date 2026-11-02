@@ -41,6 +41,9 @@
     <string name="settings_system">System</string>
     <string name="settings_factory">Factory menu</string>
     <string name="settings_factory_desc">The Sharp factory menu: startup input, panel and other system-level settings. This is also where you turn ADB on.</string>
+    <string name="factory_open">Open factory menu</string>
+    <string name="default_home_no_appinfo">The current settings app has no App info page, so the default launcher cannot be cleared from here.\n\nOpen the factory menu, then Android Setting - Apps, find the launcher and clear its defaults.</string>
+    <string name="accessibility_no_page">The current settings app has no Accessibility page.\n\nOpen the factory menu, then Android Setting - Accessibility, and turn on \u201cLuma TV Home remote shortcut\u201d.</string>
     <string name="factory_unavailable">Factory menu unavailable</string>
     <string name="settings_home">Home screen</string>
     <string name="pinned_count_fmt">%1$d / %2$d</string>

@@ -41,6 +41,9 @@
     <string name="settings_system">系统</string>
     <string name="settings_factory">工厂菜单</string>
     <string name="settings_factory_desc">原厂工厂菜单:开机信源、面板等系统级设置都在这里；ADB 开关也在这里。</string>
+    <string name="factory_open">打开工厂菜单</string>
+    <string name="default_home_no_appinfo">当前系统的设置里没有「应用信息」页，没法在这里清除默认桌面。\n\n请打开工厂菜单 → Android Setting → 应用，找到那个桌面，点「清除默认设置」。</string>
+    <string name="accessibility_no_page">当前系统的设置里没有「无障碍」页。\n\n请打开工厂菜单 → Android Setting → 无障碍，在那里开启「拾光桌面 遥控器快捷键」。</string>
     <string name="factory_unavailable">工厂菜单不可用</string>
     <string name="settings_home">首页</string>
     <string name="pinned_count_fmt">%1$d / %2$d</string>

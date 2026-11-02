@@ -358,25 +358,57 @@ public class RemoteKeyActivity extends Activity {
      * 进过工厂模式后 com.sharp.settings 会被禁用,这时按遥控器的"设置"键什么都不会发生,
      * 但 AOSP 那套仍在,所以这里逐个试,不依赖某一条固定路径。
      */
+    /**
+     * 打开无障碍设置页。
+     *
+     * 这台电视的两套设置互斥:正常模式只有 com.sharp.settings,它虽然声明了
+     * ACCESSIBILITY_SETTINGS,但只是打开设置首页、并不跳无障碍页;工厂模式下
+     * 才有真正带无障碍页的 com.android.settings。
+     * 所以先看这个 action 会被谁接走:不是 AOSP 设置就不用跳了,直接指路。
+     */
     private void openAccessibilitySettings() {
-        Intent[] candidates = new Intent[]{
-                new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS),
-                new Intent().setComponent(new ComponentName(
-                        "com.android.settings", "com.android.settings.AccessibilitySettings")),
-                new Intent().setComponent(new ComponentName(
-                        "com.android.settings", "com.android.settings.Settings")),
-                new Intent(Settings.ACTION_SETTINGS)
-        };
-        for (Intent i : candidates) {
-            i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        Intent intent = new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);
+        ResolveInfo ri = getPackageManager().resolveActivity(intent, 0);
+        String owner = (ri == null || ri.activityInfo == null)
+                ? null : ri.activityInfo.packageName;
+
+        if ("com.android.settings".equals(owner)) {
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             try {
-                startActivity(i);
+                startActivity(intent);
                 return;
             } catch (Throwable ignored) {
-                // 试下一个
+                // 落到下面的指引
             }
         }
-        Toast.makeText(this, R.string.remote_need_service, Toast.LENGTH_LONG).show();
+        showFactoryHint();
+    }
+
+    /** 说明为什么跳不过去,并给一个直达工厂菜单的按钮 */
+    private void showFactoryHint() {
+        new AlertDialog.Builder(this)
+                .setTitle(R.string.remote_service)
+                .setMessage(R.string.accessibility_no_page)
+                .setPositiveButton(R.string.factory_open,
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface d, int which) {
+                                openFactoryMenu();
+                            }
+                        })
+                .setNegativeButton(R.string.cancel, null)
+                .show();
+    }
+
+    private void openFactoryMenu() {
+        try {
+            Intent i = new Intent();
+            i.setComponent(new ComponentName("com.android.FactoryAdjust",
+                    "com.android.FactoryAdjust.FactoryActivity"));
+            startActivity(i);
+        } catch (Throwable t) {
+            Toast.makeText(this, R.string.factory_unavailable, Toast.LENGTH_SHORT).show();
+        }
     }
 
     private boolean isServiceEnabled() {

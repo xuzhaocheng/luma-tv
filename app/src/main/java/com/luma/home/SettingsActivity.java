@@ -270,26 +270,45 @@ public class SettingsActivity extends Activity {
     }
 
     /** 打开某个应用的应用信息页(里面才有「清除默认设置」按钮) */
+    /**
+     * 打开某个应用的应用信息页(里面才有「清除默认设置」按钮)。
+     *
+     * 这台电视的两套设置是互斥的:正常模式只有 com.sharp.settings,它并没有
+     * 应用信息页;工厂模式下才有 com.android.settings。所以先探测能不能跳,
+     * 跳不过去时给出去工厂菜单的明确指引,而不是丢一句"失败"。
+     */
     private void openAppInfo(String pkg) {
         if (pkg == null) {
-            Toast.makeText(this, R.string.default_home_failed, Toast.LENGTH_LONG).show();
+            showFactoryHint(R.string.default_home_no_appinfo);
+            return;
+        }
+        Intent intent = new Intent(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+                Uri.parse("package:" + pkg));
+        if (getPackageManager().resolveActivity(intent, 0) == null) {
+            showFactoryHint(R.string.default_home_no_appinfo);
             return;
         }
         try {
-            Intent i = new Intent(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
-                    Uri.parse("package:" + pkg));
-            startActivity(i);
+            startActivity(intent);
         } catch (Throwable t) {
-            try {
-                Intent i = new Intent();
-                i.setComponent(new ComponentName("com.android.settings",
-                        "com.android.settings.applications.InstalledAppDetails"));
-                i.setData(Uri.parse("package:" + pkg));
-                startActivity(i);
-            } catch (Throwable t2) {
-                Toast.makeText(this, R.string.default_home_failed, Toast.LENGTH_LONG).show();
-            }
+            showFactoryHint(R.string.default_home_no_appinfo);
         }
+    }
+
+    /** 跳不过去时:说明原因 + 给一个直达工厂菜单的按钮 */
+    private void showFactoryHint(int messageRes) {
+        new AlertDialog.Builder(this)
+                .setTitle(R.string.settings_system)
+                .setMessage(messageRes)
+                .setPositiveButton(R.string.factory_open,
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface d, int which) {
+                                openFactoryMenu();
+                            }
+                        })
+                .setNegativeButton(R.string.cancel, null)
+                .show();
     }
 
     private String mediaAppLabel() {

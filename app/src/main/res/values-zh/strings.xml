@@ -65,7 +65,7 @@
     <string name="settings_show_internal_apps">显示内部服务</string>
     <string name="settings_show_internal_desc">BTBinder、HotelMenu、OtaUpgrade 等内部服务默认隐藏；打开后会在全部应用里显示。</string>
     <string name="settings_about">关于</string>
-    <string name="settings_version">拾光桌面 v1.0</string>
+    <string name="settings_version">拾光桌面 v%1$s</string>
 
     <string name="src_atv">模拟电视</string>
     <string name="src_dvbc">有线电视</string>

@@ -65,7 +65,7 @@
     <string name="settings_show_internal_apps">Show internal services</string>
     <string name="settings_show_internal_desc">BTBinder, HotelMenu, OtaUpgrade and similar services are hidden. Turn on to show them in All apps.</string>
     <string name="settings_about">About</string>
-    <string name="settings_version">Luma TV Home v1.0</string>
+    <string name="settings_version">Luma TV Home v%1$s</string>
 
     <!-- 信号源默认名 -->
     <string name="src_atv">Analog TV</string>

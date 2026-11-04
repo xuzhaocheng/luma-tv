@@ -7,8 +7,8 @@ android {
         applicationId "com.luma.home"
         minSdkVersion 19
         targetSdkVersion 28
-        versionCode 1
-        versionName "1.0"
+        versionCode 2
+        versionName "1.1"
         // API 19 没有原生 VectorDrawable,构建时栅格化。
         // 只生成 xxxhdpi(240px/24dp),让 240dpi 电视从高分辨率往下缩,避免放大发虚。
         vectorDrawables.generatedDensities = ['xxxhdpi']

@@ -136,7 +136,7 @@ public class SettingsActivity extends Activity {
         });
 
         ((TextView) findViewById(R.id.tv_about)).setText(
-                getString(R.string.settings_version)
+                getString(R.string.settings_version, versionName())
                         + "\n" + Build.MANUFACTURER + " " + Build.MODEL
                         + "  ·  Android " + Build.VERSION.RELEASE);
     }
@@ -309,6 +309,15 @@ public class SettingsActivity extends Activity {
                         })
                 .setNegativeButton(R.string.cancel, null)
                 .show();
+    }
+
+    /** 从 APK 里读版本名,避免文案和 build.gradle 各写一份 */
+    private String versionName() {
+        try {
+            return getPackageManager().getPackageInfo(getPackageName(), 0).versionName;
+        } catch (Throwable t) {
+            return "";
+        }
     }
 
     private String mediaAppLabel() {

@@ -23,13 +23,13 @@ jobs:
           distribution: temurin
           java-version: '17'
 
-      - name: Set up Android SDK
-        uses: android-actions/setup-android@v3
-
       - name: Install SDK packages
         run: |
-          yes | sdkmanager --licenses > /dev/null
-          sdkmanager "platform-tools" "platforms;android-33" "build-tools;33.0.1"
+          # ubuntu 镜像自带 Android SDK；setup-android 的 "sdkmanager tools"
+          # 在新版 cmdline-tools 上会失败，所以直接用预装的 sdkmanager
+          SDKMANAGER=$(command -v sdkmanager || echo "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager")
+          yes | "$SDKMANAGER" --licenses > /dev/null 2>&1 || true
+          "$SDKMANAGER" "platform-tools" "platforms;android-33" "build-tools;33.0.1"
 
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v4

@@ -1,2 +1,2 @@
-rootProject.name = "tvdesk"
+rootProject.name = "luma-tv-home"
 include ':app'
